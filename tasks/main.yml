@@ -1,0 +1,26 @@
+---
+- name: Ensure group exists
+  group:
+    name: "{{ newrelic_java_agent_group }}"
+
+- name: Ensure user exists
+  user:
+    name: "{{ newrelic_java_agent_user }}"
+
+- name: Create the NR Java Agent directory
+  file:
+    path: "{{ newrelic_java_agent_path }}"
+    state: directory
+
+- name: Download the latest java agent .zip and unarchive it into NR Agent dir
+  unarchive:
+    remote_src: yes
+    dest: "{{ newrelic_java_agent_path }}"
+    src: "{{ newrelic_java_agent_url }}"
+    owner: "{{ newrelic_java_agent_user }}"
+    group: "{{ newrelic_java_agent_group }}"
+
+- name: Place newrelic.yml config
+  template:
+    src: "newrelic.yml.j2"
+    dest: "{{ newrelic_java_agent_path }}/newrelic.yml"
