@@ -26,10 +26,7 @@
     group: "{{ newrelic_java_agent_group }}"
 
 - name: Copy files from tmp dir to agent directory
-  copy:
-    remote_src: yes
-    src: "/tmp/newrelic-agent-install/newrelic/"
-    dest: "{{ newrelic_java_agent_path }}"
+  shell: cp /tmp/newrelic-agent-install/newrelic/* {{newrelic_java_agent_path}}/
 
 - name: Remove tmp dir
   file:
