@@ -20,7 +20,14 @@
     owner: "{{ newrelic_java_agent_user }}"
     group: "{{ newrelic_java_agent_group }}"
 
-- name: Place newrelic.yml config
+- name: Place newrelic.yml config (default)
   template:
     src: "newrelic.yml.j2"
     dest: "{{ newrelic_java_agent_path }}/newrelic.yml"
+  when: newrelic_java_agent_custom_config is not defined
+
+- name: Place newrelic.yml config (custom)
+  template:
+    src: "{{ newrelic_java_agent_custom_config }}"
+    dest: "{{ newrelic_java_agent_path }}/newrelic.yml"
+  when: newrelic_java_agent_custom_config is defined
