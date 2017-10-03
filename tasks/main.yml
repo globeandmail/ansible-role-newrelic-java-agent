@@ -48,7 +48,7 @@
 - name: Update ownership of NR agent dir + contents
   file:
     path: "{{ newrelic_java_agent_path }}"
-    owner: "{{ nerelic_java_agent_user }}"
+    owner: "{{ newrelic_java_agent_user }}"
     group: "{{ newrelic_java_agent_group }}"
     state: directory
     recurse: yes
