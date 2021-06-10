@@ -7,31 +7,14 @@
   user:
     name: "{{ newrelic_java_agent_user }}"
 
-- name: Create tmp dir for unarchiving
-  file:
-    path: "/tmp/newrelic-agent-install"
-    state: directory
-
-- name: Create the NR Java Agent directory
-  file:
-    path: "{{ newrelic_java_agent_path }}"
-    state: directory
-
 - name: Download the latest java agent .zip and unarchive it into NR Agent dir
   unarchive:
     remote_src: yes
-    dest: "/tmp/newrelic-agent-install"
+    dest: "{{ newrelic_java_agent_parent_path }}"
+    creates: "{{ newrelic_java_agent_path }}"
     src: "{{ newrelic_java_agent_url }}"
     owner: "{{ newrelic_java_agent_user }}"
     group: "{{ newrelic_java_agent_group }}"
-
-- name: Copy files from tmp dir to agent directory
-  shell: cp /tmp/newrelic-agent-install/newrelic/* {{newrelic_java_agent_path}}/
-
-- name: Remove tmp dir
-  file:
-    path: "/tmp/newrelic-agent-install"
-    state: absent
 
 - name: Place newrelic.yml config (default)
   template:
