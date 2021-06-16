@@ -7,6 +7,13 @@
   user:
     name: "{{ newrelic_java_agent_user }}"
 
+- name: Make sure New Relic parent directory exists
+  file:
+    path: "{{ newrelic_java_agent_parent_path }}"
+    state: directory
+    owner: "{{ newrelic_java_agent_user }}"
+    group: "{{ newrelic_java_agent_group }}"
+
 - name: Download the latest java agent .zip and unarchive it into NR Agent dir
   unarchive:
     remote_src: yes
