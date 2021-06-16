@@ -7,6 +7,17 @@
   user:
     name: "{{ newrelic_java_agent_user }}"
 
+- name: Check if file exists
+  stat:
+    path: "{{ newrelic_java_agent_parent_path }}"
+  register: parent_dir
+
+- name: Create New Relic Parent Directory
+  file:
+    path: "{{ newrelic_java_agent_parent_path }}"
+    state: directory
+  when: tmp_file.stat.exists == false
+
 - name: Make sure New Relic parent directory exists
   file:
     path: "{{ newrelic_java_agent_parent_path }}"
