@@ -1,6 +1,6 @@
 ---
 newrelic_java_agent_parent_path: "/opt"
-newrelic_java_agent_path: "{{ newrelic_java_agent_parent_path }}/newrelic/"
+newrelic_java_agent_path: "{{ newrelic_java_agent_parent_path }}/newrelic"
 newrelic_java_agent_url: "https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip"
 newrelic_java_agent_user: "newrelic"
 newrelic_java_agent_group: "newrelic"

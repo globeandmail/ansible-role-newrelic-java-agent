@@ -16,14 +16,9 @@
   file:
     path: "{{ newrelic_java_agent_parent_path }}"
     state: directory
-  when: tmp_file.stat.exists == false
-
-- name: Make sure New Relic parent directory exists
-  file:
-    path: "{{ newrelic_java_agent_parent_path }}"
-    state: directory
     owner: "{{ newrelic_java_agent_user }}"
     group: "{{ newrelic_java_agent_group }}"
+  when: parent_dir.stat.exists == false
 
 - name: Download the latest java agent .zip and unarchive it into NR Agent dir
   unarchive:
@@ -34,21 +29,35 @@
     owner: "{{ newrelic_java_agent_user }}"
     group: "{{ newrelic_java_agent_group }}"
 
+- name: Stat the New Relic Custom file
+  stat:
+    path: "{{ newrelic_java_agent_path }}/newrelic.yml"
+  register: custom_file
+
+- debug: var="custom_file" verbosity=3
+
 - name: Place newrelic.yml config (default)
   template:
     src: "newrelic.yml.j2"
     dest: "{{ newrelic_java_agent_path }}/newrelic.yml"
-  when: newrelic_java_agent_custom_config is not defined
+    owner: "{{ newrelic_java_agent_user }}"
+    group: "{{ newrelic_java_agent_group }}"
+  when: 
+    - newrelic_java_agent_custom_config is not defined
+    - not custom_file.stat.exists
 
 - name: Place newrelic.yml config (custom)
   template:
     src: "{{ newrelic_java_agent_custom_config }}"
     dest: "{{ newrelic_java_agent_path }}/newrelic.yml"
-  when: newrelic_java_agent_custom_config is defined
-
+    owner: "{{ newrelic_java_agent_user }}"
+    group: "{{ newrelic_java_agent_group }}"
+  when: 
+    - newrelic_java_agent_custom_config is defined
+  
 - name: Update ownership of NR agent dir + contents
   file:
-    path: "{{ newrelic_java_agent_path }}"
+    path: "{{ newrelic_java_agent_parent_path }}"
     owner: "{{ newrelic_java_agent_user }}"
     group: "{{ newrelic_java_agent_group }}"
     state: directory
