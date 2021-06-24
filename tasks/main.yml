@@ -1,4 +1,12 @@
 ---
+- name: Update Apt-Cache
+  apt:
+    name: "{{ item }}"
+    update_cache: true
+    cache_valid_time: 3600
+  loop:
+    - unzip
+
 - name: Ensure group exists
   group:
     name: "{{ newrelic_java_agent_group }}"
